@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:blibli_app/http/core/hi_cache.dart';
 import 'package:blibli_app/http/core/hi_net.dart';
 import 'package:blibli_app/http/request/test_request.dart';
 import 'package:flutter/material.dart';
@@ -54,9 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void _incrementCounter() async{
 
-    TestRequest testRequest = TestRequest();
-    testRequest.add("aaa", "bbb").add("ccc", "ddd");
-    var result = HiNet.getInstance().fire(testRequest);
+    // TestRequest testRequest = TestRequest();
+    // testRequest.add("aaa", "bbb").add("ccc", "ddd");
+    // var result = HiNet.getInstance().fire(testRequest);
 
     // setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -67,6 +68,10 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter++;
 
     // });
+
+    HiCache.getInstance().setInt("aaa", 111111);
+    int value = HiCache.getInstance().get("aaa");
+    print(value);
   }
 
 
