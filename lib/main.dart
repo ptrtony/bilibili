@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:blibli_app/http/core/hi_cache.dart';
+import 'package:blibli_app/db/hi_cache.dart';
 import 'package:blibli_app/http/core/hi_net.dart';
 import 'package:blibli_app/http/request/test_request.dart';
 import 'package:flutter/material.dart';
