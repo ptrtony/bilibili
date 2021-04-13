@@ -29,10 +29,14 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   dio: ^4.0.0
+  json_annotation: ^3.1.0
+
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  json_serializable: ^3.5.0
+  build_runner: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -75,3 +79,5 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+#PUB_HOSTED_URL ===== https://pub.flutter-io.cn
+#FLUTTER_STORAGE_BASE_URL ===== https://storage.flutter-io.cn
