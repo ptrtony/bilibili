@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:blibli_app/db/hi_cache.dart';
 import 'package:blibli_app/http/core/hi_net.dart';
+import 'package:blibli_app/http/core/hi_net_error.dart';
+import 'package:blibli_app/http/request/notice_request.dart';
 import 'package:blibli_app/http/request/test_request.dart';
 import 'package:flutter/material.dart';
 
@@ -53,27 +55,26 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
-  void _incrementCounter() async{
-
+  void _incrementCounter() async {
     // TestRequest testRequest = TestRequest();
     // testRequest.add("aaa", "bbb").add("ccc", "ddd");
     // var result = HiNet.getInstance().fire(testRequest);
 
     // setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      // _counter++;
+    // This call to setState tells the Flutter framework that something has
+    // changed in this State, which causes it to rerun the build method below
+    // so that the display can reflect the updated values. If we changed
+    // _counter without calling setState(), then the build method would not be
+    // called again, and so nothing would appear to happen.
+    // _counter++;
 
     // });
 
-    HiCache.getInstance().setInt("aaa", 111111);
-    int value = HiCache.getInstance().get("aaa");
-    print(value);
+    // HiCache.getInstance().setInt("aaa", 111111);
+    // int value = HiCache.getInstance().get("aaa");
+    // print(value);
+    testNotice();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -125,5 +126,19 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void testNotice() async {
+    NoticeRequest request = NoticeRequest();
+    try {
+      var result = await HiNet.getInstance().fire(request);
+      print(result);
+    } on NeedLogin catch (e) {
+      print(e);
+    } on NeedAuth catch (e) {
+      print(e);
+    } on HiNetError catch (e) {
+      print(e.message);
+    }
   }
 }
