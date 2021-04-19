@@ -5,6 +5,7 @@ import 'package:blibli_app/http/core/hi_net.dart';
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/request/notice_request.dart';
 import 'package:blibli_app/http/request/test_request.dart';
+import 'package:blibli_app/utils/color.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -27,7 +28,7 @@ class MyApp extends StatelessWidget {
         // or simply save your changes to "hot reload" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: white,
       ),
       home: MyHomePage(title: 'Flutter Demo Home Page'),
     );

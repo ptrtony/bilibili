@@ -5,7 +5,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-import 'color.dart';
+import '../utils/color.dart';
 
 class LoginInput extends StatefulWidget {
   final String title;

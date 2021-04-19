@@ -8,6 +8,7 @@ import 'package:blibli_app/http/request/registration_request.dart';
 //Dao数据访问对象
 class LoginDao {
 
+
   static const BOARDING_PASS = "boarding-pass";
   static login(String userName, String password) {
     return _send(userName, password);
