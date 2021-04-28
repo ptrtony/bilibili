@@ -1,6 +1,6 @@
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/login_dao.dart';
-import 'package:blibli_app/page/app_bar.dart';
+import 'package:blibli_app/widget/app_bar.dart';
 import 'package:blibli_app/utils/string_util.dart';
 import 'package:blibli_app/widget/login_effect.dart';
 import 'package:blibli_app/widget/login_input.dart';
@@ -8,6 +8,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
+  final VoidCallback jumpToRegistration;
+
+  const LoginPage({Key key,this.jumpToRegistration}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -21,7 +25,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar('密码登录', '注册', () {}),
+      appBar: appBar('密码登录', '注册', () {
+        if(widget.jumpToRegistration!=null){
+          widget.jumpToRegistration();
+        }
+      }),
       body: Container(
         child: ListView(
           children: [
@@ -93,6 +101,7 @@ class _LoginPageState extends State<LoginPage> {
       var result = await LoginDao.login(userName, password);
       if (result['code'] == 0) {
         print("登录成功");
+
       }
     } on NeedAuth catch (e) {
       print(e);

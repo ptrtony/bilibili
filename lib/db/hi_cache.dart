@@ -30,7 +30,7 @@ class HiCache {
   }
 
   ///预处理方法
-  Future<HiCache> preInit() async {
+  static Future<HiCache> preInit() async {
     if (_instance == null) {
       var prefers = await SharedPreferences.getInstance();
       _instance = HiCache._pre(prefers);

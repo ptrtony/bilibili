@@ -1,12 +1,15 @@
-import 'dart:convert';
 
 import 'package:blibli_app/db/hi_cache.dart';
-import 'package:blibli_app/http/core/hi_net.dart';
-import 'package:blibli_app/http/core/hi_net_error.dart';
-import 'package:blibli_app/http/request/notice_request.dart';
-import 'package:blibli_app/http/request/test_request.dart';
+import 'package:blibli_app/http/dao/login_dao.dart';
+import 'package:blibli_app/navigator/hi_navigator.dart';
+import 'package:blibli_app/page/home_page.dart';
+import 'package:blibli_app/page/login_page.dart';
+import 'package:blibli_app/page/registration_page.dart';
+import 'package:blibli_app/page/video_detail_page.dart';
 import 'package:blibli_app/utils/color.dart';
 import 'package:flutter/material.dart';
+
+import 'model/video_model.dart';
 
 void main() {
   runApp(MyApp());
@@ -30,116 +33,121 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: white,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: LoginPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
+class BiliApp extends StatefulWidget {
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _BiliAppState createState() => _BiliAppState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() async {
-    // TestRequest testRequest = TestRequest();
-    // testRequest.add("aaa", "bbb").add("ccc", "ddd");
-    // var result = HiNet.getInstance().fire(testRequest);
-
-    // setState(() {
-    // This call to setState tells the Flutter framework that something has
-    // changed in this State, which causes it to rerun the build method below
-    // so that the display can reflect the updated values. If we changed
-    // _counter without calling setState(), then the build method would not be
-    // called again, and so nothing would appear to happen.
-    // _counter++;
-
-    // });
-
-    // HiCache.getInstance().setInt("aaa", 111111);
-    // int value = HiCache.getInstance().get("aaa");
-    // print(value);
-    testNotice();
-  }
+class _BiliAppState extends State<BiliApp> {
+  BiliRouteDelegate _biliRouteDelegate = BiliRouteDelegate();
+  // BiliRouteInformationParser _biliRouteInformationParser = BiliRouteInformationParser();
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+    //定义widget
+    return FutureBuilder<HiCache>(
+        future: HiCache.preInit(),
+        builder: (BuildContext context, AsyncSnapshot<HiCache> snapshot) {
+          var widget = snapshot.connectionState == ConnectionState.done ?
+          Router(routerDelegate: _biliRouteDelegate,) : Scaffold(
+            body: Center(child: CircularProgressIndicator(),),
+          );
+          return MaterialApp(
+            home: widget, theme: ThemeData(primarySwatch: white),);
+        });
+  }
+}
+
+
+class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
+    with ChangeNotifier, PopNavigatorRouterDelegateMixin<BiliRoutePath> {
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  //给Navigator设置一个key，必要的时候可以通过navigatorKe.currentState来获取到NavigatorState对象
+  BiliRouteDelegate() : navigatorKey = GlobalKey<NavigatorState>();
+  RouteStatus _routeStatus = RouteStatus.home;
+  List<MaterialPage> pages = [];
+
+  RouteStatus get routeStatus{
+    if(_routeStatus != RouteStatus.registration && !hasLogin){
+      return _routeStatus = RouteStatus.login;
+    }
+  }
+  BiliRoutePath path;
+
+  bool get hasLogin => LoginDao.getBoardingPass();
+  VideoModel videoModel;
+  @override
+  Widget build(BuildContext context) {
+    var index = getPageIndex(pages, routeStatus);
+    List<MaterialPage> tempPages = pages;
+    if(index != -1) {
+      //要打开的页面中的栈中存在，则将该页面和它上面的所有页面进行出栈
+      //tips 具体规则可以根据需要进行调整，这里要求栈中只允许有一个同样的页面的实例
+      tempPages = tempPages.sublist(0,index);
+    }
+    //构建路由栈
+    var page;
+    if(routeStatus == RouteStatus.home){
+      //跳转首页时将栈中其他页面进行出栈，因为首页不可回退
+      pages.clear();
+      page = pageWrap(HomePage(
+        onJumpToDetail: (videoModel){
+          this.videoModel = videoModel;
+          notifyListeners();
+        },
+      ));
+    }else if(routeStatus == RouteStatus.detail){
+      page = pageWrap(VideoDetailPage(videoModel));
+    }else if(routeStatus == RouteStatus.registration){
+      page = pageWrap(RegistrationPage(toJumpLogin:(){
+        _routeStatus = RouteStatus.login;
+        notifyListeners();
+      }));
+    }else if(routeStatus == RouteStatus.login){
+      page = pageWrap(LoginPage(jumpToRegistration:(){
+        _routeStatus = RouteStatus.registration;
+        notifyListeners();
+      }));
+    }
+    return Navigator(
+      key: navigatorKey,
+      pages: pages,
+      onPopPage: (route, result) {
+        return route.didPop(result);
+      },
     );
   }
 
-  void testNotice() async {
-    NoticeRequest request = NoticeRequest();
-    try {
-      var result = await HiNet.getInstance().fire(request);
-      print(result);
-    } on NeedLogin catch (e) {
-      print(e);
-    } on NeedAuth catch (e) {
-      print(e);
-    } on HiNetError catch (e) {
-      print(e.message);
-    }
+  @override
+  Future<void> setNewRoutePath(BiliRoutePath path) async {
+    this.path = path;
   }
+}
+
+///
+class BiliRouteInformationParser extends RouteInformationParser<BiliRoutePath> {
+  @override
+  Future<BiliRoutePath> parseRouteInformation(
+      RouteInformation routeInformation) async {
+    final uri = Uri.parse(routeInformation.location);
+    print("uri:$uri");
+    if (uri.pathSegments.length == 0) {
+      return BiliRoutePath.home();
+    }
+    return BiliRoutePath.detail();
+  }
+}
+
+class BiliRoutePath {
+  final String location;
+
+  BiliRoutePath.home() : location = "/";
+
+  BiliRoutePath.detail() : location = "/detail";
 }
