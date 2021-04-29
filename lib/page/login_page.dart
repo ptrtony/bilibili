@@ -1,5 +1,6 @@
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/login_dao.dart';
+import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/widget/app_bar.dart';
 import 'package:blibli_app/utils/string_util.dart';
 import 'package:blibli_app/widget/login_effect.dart';
@@ -8,9 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
-  final VoidCallback jumpToRegistration;
-
-  const LoginPage({Key key,this.jumpToRegistration}) : super(key: key);
+  const LoginPage({Key key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -26,9 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar('密码登录', '注册', () {
-        if(widget.jumpToRegistration!=null){
-          widget.jumpToRegistration();
-        }
+        HiNavigator.getInstance().onJumpTo(RouteStatus.registration);
       }),
       body: Container(
         child: ListView(
@@ -100,8 +97,8 @@ class _LoginPageState extends State<LoginPage> {
     try {
       var result = await LoginDao.login(userName, password);
       if (result['code'] == 0) {
-        print("登录成功");
-
+        // print("登录成功");
+        HiNavigator.getInstance().onJumpTo(RouteStatus.home);
       }
     } on NeedAuth catch (e) {
       print(e);

@@ -1,5 +1,6 @@
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/login_dao.dart';
+import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/utils/string_util.dart';
 import 'package:blibli_app/widget/login_effect.dart';
 import 'package:blibli_app/widget/login_input.dart';
@@ -7,9 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RegistrationPage extends StatefulWidget {
-  final VoidCallback toJumpLogin;
-
-  const RegistrationPage({Key key, this.toJumpLogin}) : super(key: key);
+  const RegistrationPage({Key key}) : super(key: key);
 
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
@@ -144,9 +143,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       print(result);
       if (result["code"] == 0) {
         print("注册成功");
-        if(widget.toJumpLogin!=null){
-          widget.toJumpLogin();
-        }
+        HiNavigator.getInstance().onJumpTo(RouteStatus.login);
       }
     } on NeedAuth catch (e) {
       print(e);
