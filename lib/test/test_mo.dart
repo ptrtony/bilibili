@@ -1,20 +1,18 @@
-import 'dart:convert';
-
-class TestMo {
-  String name;
-  int count;
-
-  TestMo(this.name, this.count);
-
-  TestMo.fromJson(Map<String, dynamic> json) {
-    name = json["name"];
-    count = json["count"];
-  }
-
-  String toJson(TestMo testMo) {
-    Map<String, dynamic> json = Map();
-    json["name"] = testMo.name;
-    json["count"] = testMo.count;
-    return jsonEncode(json);
-  }
-}
+// import 'dart:convert';
+//
+// import 'package:blibli_app/test/result.dart';
+// import 'package:json_annotation/json_annotation.dart';
+//
+//
+// @JsonSerializable()
+// class TestMo {
+//   String name;
+//   int count;
+//
+//   TestMo(this.name, this.count);
+//
+//   factory Result.fromJson(Map<String,dynamic> json) => _$ResultFromJson(json);
+//
+//   Map<String,dynamic> toJson() => _$ResultToJson(this);
+//
+// }

@@ -7,11 +7,11 @@ abstract class BaseRequest {
   var pathParams;
   var useHttps = true;
 
+  HttpMethod httpMethod();
+
   String authority() {
     return "api.devio.org";
   }
-
-  HttpMethod httpMethod();
 
   String path();
 
@@ -35,6 +35,9 @@ abstract class BaseRequest {
     if (needLogin()) {
       addHeader(LoginDao.BOARDING_PASS, LoginDao.getBoardingPass());
     }
+    addHeader("course-flag", "fa");
+    addHeader("auth-token", "ZmEtMjAyMS0wNC0xMiAyMToyMjoyMC1mYQ==fa");
+
     print("url:" + uri.toString());
     return uri.toString();
   }

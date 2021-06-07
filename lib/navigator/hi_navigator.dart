@@ -1,8 +1,8 @@
+import 'package:blibli_app/navigator/bottom_navigator.dart';
 import 'package:blibli_app/page/home_page.dart';
 import 'package:blibli_app/page/login_page.dart';
 import 'package:blibli_app/page/registration_page.dart';
 import 'package:blibli_app/page/video_detail_page.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 typedef RouteChangeListener(RouteStatusInfo current,RouteStatusInfo pre);
@@ -33,7 +33,7 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.login;
   } else if (page.child is RegistrationPage) {
     return RouteStatus.registration;
-  } else if (page.child is HomePage) {
+  } else if (page.child is BottomNavigator) {
     return RouteStatus.home;
   } else if (page.child is VideoDetailPage) {
     return RouteStatus.detail;
@@ -56,6 +56,7 @@ class HiNavigator extends _RouteJumpListener{
   List<RouteChangeListener> _listener= [];
   HiNavigator._();
   RouteStatusInfo _current;
+  RouteStatusInfo _bottomTab;
   static HiNavigator _instance;
 
   static HiNavigator getInstance() {
@@ -63,6 +64,13 @@ class HiNavigator extends _RouteJumpListener{
       _instance = HiNavigator._();
     }
     return _instance;
+  }
+
+
+  ///首页底部他吧切换监听
+  void onBottomTabChange(int index,Widget page){
+    _bottomTab = RouteStatusInfo(RouteStatus.home, page);
+    _notify(_bottomTab);
   }
 
   ///注册路由跳转路基
@@ -73,7 +81,7 @@ class HiNavigator extends _RouteJumpListener{
   ///监听路由页面跳转
   void addListener(RouteChangeListener listener){
     if(!_listener.contains(listener)){
-      _listener.add((current, pre) => listener);
+      _listener.add(listener);
     }
   }
 
@@ -95,6 +103,10 @@ class HiNavigator extends _RouteJumpListener{
   }
 
   void _notify(RouteStatusInfo current) {
+    if(current.page is BottomNavigator && _bottomTab!=null){
+      //如果是打开的首页，则明确到首页具体的tab
+      current = _bottomTab;
+    }
     print("hi_navigator:current:${current.page}");
     print("hi_navigator:pre:${_current?.page}");
     _listener.forEach((listener) {

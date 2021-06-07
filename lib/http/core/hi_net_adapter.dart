@@ -10,12 +10,22 @@ abstract class HiNetAdapter{
 
 ///统一网络层返回格式
 class HiNetResponse<T>{
-  T data;
-  int statusCode;
-  String statusMessage;
-  dynamic extra;
-  BaseRequest request;
   HiNetResponse({this.data, this.request,this.statusCode, this.statusMessage, this.extra});
+
+
+  T data;
+
+
+  int statusCode;
+
+
+  String statusMessage;
+
+  dynamic extra;
+
+
+  BaseRequest request;
+
 
   @override
   String toString() {

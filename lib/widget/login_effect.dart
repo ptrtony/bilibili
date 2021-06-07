@@ -24,11 +24,19 @@ class _LoginEffectState extends State<LoginEffect> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _image(true),
+
+
+
           Image(
             height: 90,
             width: 90,
-            image: AssetImage("images/logo"),
+            image: AssetImage("images/logo.png"),
           ),
+          // Image(
+          //   height: 90,
+          //   width: 90,
+          //   image: AssetImage("images/logo.png"),
+          // ),
           _image(false)
         ],
       ),
@@ -37,9 +45,9 @@ class _LoginEffectState extends State<LoginEffect> {
 
   _image(bool left) {
     var leftImage =
-        widget.project ? "images/head_left_project" : "images/head_left";
+        widget.project ? "images/head_left_protect.png" : "images/head_left.png";
     var rightImage =
-        widget.project ? "images/head_right_project" : "images/head_right";
+        widget.project ? "images/head_right_protect.png" : "images/head_right.png";
     return Image(height: 90, image: AssetImage(left ? leftImage : rightImage));
   }
 }

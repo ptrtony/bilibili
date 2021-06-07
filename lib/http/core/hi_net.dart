@@ -4,9 +4,14 @@ import 'package:blibli_app/http/request/base_request.dart';
 
 import 'hi_net_error.dart';
 
+///1.支持网络库插拔设计，且不干扰业务层
+///2.基于配置请求请求，简洁易用
+///3.Adapter设计，扩展性强
+///4.统一异常和返回处理
 class HiNet {
   HiNet._();
 
+  // HiErrorInterceptor _hiErrorInterceptor;
   static HiNet _instance;
 
   static HiNet getInstance() {
@@ -19,55 +24,52 @@ class HiNet {
   Future fire(BaseRequest request) async {
     HiNetResponse response;
     var error;
-    try{
+    try {
       response = await send(request);
-    }on HiNetError catch(e){
+    } on HiNetError catch (e) {
       error = e;
       response = e.data;
       printLog(e.message);
-    }catch(e){
-      //其他异常
+    } catch (e) {
+      //其它异常
       error = e;
       printLog(e);
     }
-
-    if(response == null){
+    if (response == null) {
       printLog(error);
     }
-
     var result = response.data;
-    var statusCode = response.statusCode;
-    switch(statusCode){
+    printLog(result);
+    var status = response.statusCode;
+    var hiError;
+    switch (status) {
       case 200:
         return result;
+        break;
       case 401:
-        throw NeedLogin();
+        hiError = NeedLogin();
+        break;
       case 403:
-        throw HiNetError(statusCode, result.toString(),data:result);
+        hiError = NeedAuth(result.toString(), data: result);
+        break;
+      default:
+        hiError = HiNetError(status, result.toString(), data: result);
+        break;
     }
-    printLog(result);
-    return result;
+    //交给拦截器处理错误
+    // if (_hiErrorInterceptor != null) {
+    //   _hiErrorInterceptor(hiError);
+    // }
+    throw hiError;
   }
 
-  Future<dynamic> send<T>(BaseRequest request) async {
-    printLog('url:${request.url()}');
-    // printLog('method:${request.httpMethod()}');
-    // request.addHeader("token", "123456");
-    // printLog('header:${request.header}');
-    // return Future.value({
-    //   "statesCode": 200,
-    //   "data": {"code": 0, "message": "success"}
-    // });
-    ///使用mock发送数据
-    // MockAdapter mockAdapter = MockAdapter();
-    //使用dio发送数据
-    DioAdapter dioAdapter = DioAdapter();
-    return dioAdapter.send(request);
+  Future<HiNetResponse<T>> send<T>(BaseRequest request) async {
+    ///使用Dio发送请求
+    HiNetAdapter adapter = DioAdapter();
+    return adapter.send(request);
   }
 
-
-
-  void printLog(log){
-    print("hi_log:" + log.toString());
+  void printLog(log) {
+    print('hi_net:' + log.toString());
   }
 }
