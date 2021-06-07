@@ -115,7 +115,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             ),
             Padding(
               padding: EdgeInsets.only(top: 20, left: 20, right: 20),
-              child: LoginButton("注册", enable: loginEnable, onPressed: _send,),
+              child: LoginButton("注册", enable: loginEnable, onPressed: _checkParams,),
             )
           ],
         ),
@@ -140,6 +140,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
   }
 
+  void _checkParams() {
+    String tips;
+    if (password != rePassword) {
+      tips = "两次输入的密码不一致";
+    }
+    if (orderId.length != 4) {
+      tips = "请输入订单号后四位";
+    }
+    if (isNotEmpty(tips)) {
+      print(tips);
+      return;
+    }
+    _send();
+  }
+
+
   void _send() async {
     try {
       var result =
@@ -158,20 +174,5 @@ class _RegistrationPageState extends State<RegistrationPage> {
     } catch (e) {
       print("注册失败:" + e.toString());
     }
-  }
-
-  void _checkParams() {
-    String tips;
-    if (password != rePassword) {
-      tips = "两次输入的密码不一致";
-    }
-    if (orderId.length != 4) {
-      tips = "请输入订单号后四位";
-    }
-    if (isNotEmpty(tips)) {
-      print(tips);
-      return;
-    }
-    _send();
   }
 }

@@ -20,7 +20,6 @@ int getPageIndex(List<MaterialPage> pages, RouteStatus routeStatus) {
       return i;
     }
   }
-
   return -1;
 }
 
