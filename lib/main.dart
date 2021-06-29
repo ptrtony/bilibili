@@ -1,5 +1,6 @@
 import 'package:blibli_app/db/hi_cache.dart';
 import 'package:blibli_app/http/dao/login_dao.dart';
+import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/navigator/bottom_navigator.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/page/home_page.dart';
@@ -58,7 +59,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
         RouteStatusListener((RouteStatus routeStatus, {Map args}) {
       this._routeStatus = routeStatus;
       if (routeStatus == RouteStatus.detail) {
-        this.videoModel = args["videoMo"];
+        this.videoMo = args["videoMo"];
       }
       notifyListeners();
     }));
@@ -70,7 +71,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   RouteStatus get routeStatus {
     if (_routeStatus != RouteStatus.registration && !hasLogin) {
       return _routeStatus = RouteStatus.login;
-    }else if(videoModel != null){
+    }else if(videoMo != null){
       return _routeStatus = RouteStatus.detail;
     }else {
       return _routeStatus;
@@ -80,7 +81,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   BiliRoutePath path;
 
   bool get hasLogin => LoginDao.getBoardingPass() != null;
-  VideoModel videoModel;
+  VideoMo videoMo;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +99,7 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
       pages.clear();
       page = pageWrap(BottomNavigator());
     } else if (routeStatus == RouteStatus.detail) {
-      page = pageWrap(VideoDetailPage(videoModel));
+      page = pageWrap(VideoDetailPage(videoMo));
     } else if (routeStatus == RouteStatus.registration) {
       page = pageWrap(RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {

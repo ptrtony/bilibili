@@ -1,5 +1,4 @@
 import 'package:blibli_app/navigator/bottom_navigator.dart';
-import 'package:blibli_app/page/home_page.dart';
 import 'package:blibli_app/page/login_page.dart';
 import 'package:blibli_app/page/registration_page.dart';
 import 'package:blibli_app/page/video_detail_page.dart';

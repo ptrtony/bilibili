@@ -1,23 +1,26 @@
+import 'package:blibli_app/core/HiState.dart';
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/home_dao.dart';
 import 'package:blibli_app/model/home_model.dart';
-import 'package:blibli_app/model/video_model.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/page/home_tab_page.dart';
 import 'package:blibli_app/utils/color.dart';
 import 'package:blibli_app/utils/toast_util.dart';
+import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:underline_indicator/underline_indicator.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
+  final ValueChanged<int> onJumpTo;
+
+  const HomePage({Key key, this.onJumpTo}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage>
+class _HomePageState extends HiState<HomePage>
     with AutomaticKeepAliveClientMixin, TickerProviderStateMixin {
   var listener;
   TabController _controller;
@@ -51,26 +54,28 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     _controller = TabController(length: categoryList.length, vsync: this);
     return Scaffold(
-      body: Container(
-        child: Column(
-          children: [
-            Container(
+      body: Column(
+        children: [
+          NavigationBar(
+              height: 50,
               color: Colors.white,
-              padding: EdgeInsets.only(top: 30),
-              child: _tabBar(),
-            ),
-            Flexible(
-                child: TabBarView(
-              controller: _controller,
-              children: categoryList.map((tab) {
-                return HomeTabPage(
-                  name: tab.name,
-                  bannerList: tab.name == "推荐" ? bannerList : null,
-                );
-              }).toList(),
-            ))
-          ],
-        ),
+              statusStyle: StatusStyle.DARK_CONTENT,
+              children: _appBar()),
+          Container(
+            color: Colors.white,
+            child: _tabBar(),
+          ),
+          Flexible(
+              child: TabBarView(
+            controller: _controller,
+            children: categoryList.map((tab) {
+              return HomeTabPage(
+                categoryName: tab.name,
+                bannerList: tab.name == "推荐" ? bannerList : null,
+              );
+            }).toList(),
+          ))
+        ],
       ),
     );
   }
@@ -112,7 +117,61 @@ class _HomePageState extends State<HomePage>
         bannerList = homeMo.bannerList;
       });
     } on NeedLogin catch (e) {
-      showToast(e.message);
+      showWarnToast(e.message);
+    } on NeedAuth catch (e) {
+      showWarnToast(e.message);
     }
+  }
+
+  _appBar() {
+    return Padding(
+      padding: EdgeInsets.only(left: 15, right: 15),
+      child: Row(
+        children: [
+          InkWell(
+            onTap: () {
+              if (widget.onJumpTo != null) {
+                widget.onJumpTo(3);
+              }
+            },
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(23),
+              child: Image(
+                  width: 46,
+                  height: 46,
+                  image: AssetImage('images/avatar.png')),
+            ),
+          ),
+          Expanded(
+              child: Padding(
+            padding: EdgeInsets.only(left: 15, right: 15),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: EdgeInsets.only(left: 10),
+                height: 32,
+                alignment: Alignment.centerLeft,
+                child: Icon(
+                  Icons.search,
+                  color: Colors.grey,
+                ),
+                decoration: BoxDecoration(color: Colors.grey[100]),
+              ),
+            ),
+          )),
+          Icon(
+            Icons.explore_outlined,
+            color: Colors.grey,
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 12),
+            child: Icon(
+              Icons.email,
+              color: Colors.grey,
+            ),
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,5 +1,4 @@
 import 'package:blibli_app/http/core/hi_net.dart';
-import 'package:blibli_app/http/core/hi_net_adapter.dart';
 import 'package:blibli_app/http/request/home_request.dart';
 import 'package:blibli_app/model/home_model.dart';
 
