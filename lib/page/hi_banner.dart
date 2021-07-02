@@ -3,6 +3,7 @@ import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/utils/toast_util.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HiBanner extends StatelessWidget {
   final List<BannerMo> bannerList;
@@ -57,6 +58,12 @@ class HiBanner extends StatelessWidget {
     if (bannerMo.type == "video") {
       HiNavigator.getInstance().onJumpTo(RouteStatus.detail,
           args: {"videoMo": VideoMo(vid: bannerMo.url)});
+    }else{
+      _launchURL(bannerMo.url);
     }
   }
+
+
+  void _launchURL(String _url) async =>
+      await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
 }

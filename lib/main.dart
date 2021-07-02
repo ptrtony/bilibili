@@ -71,9 +71,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
   RouteStatus get routeStatus {
     if (_routeStatus != RouteStatus.registration && !hasLogin) {
       return _routeStatus = RouteStatus.login;
-    }else if(videoMo != null){
+    } else if (videoMo != null) {
       return _routeStatus = RouteStatus.detail;
-    }else {
+    } else {
       return _routeStatus;
     }
   }

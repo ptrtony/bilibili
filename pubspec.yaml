@@ -37,6 +37,13 @@ dependencies:
   flutter_statusbar_manager: ^2.0.0 # 状态栏
   flutter_staggered_grid_view: ^0.4.0
   transparent_image: ^2.0.0
+  cached_network_image: ^2.5.0
+  lottie: ^1.0.1 #动画 https://www.lottiefiles.com
+  url_launcher: ^5.4.0 #webview引擎
+  chewie: ^1.0.0
+  video_player: ^2.1.6
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -59,6 +66,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
       - images/
+      - assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

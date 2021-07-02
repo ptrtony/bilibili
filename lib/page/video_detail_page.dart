@@ -1,6 +1,7 @@
 
 
 import 'package:blibli_app/model/home_model.dart';
+import 'package:blibli_app/widget/video_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,19 @@ class _VideoDetailPageState extends State<VideoDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(appBar: AppBar(),
     body: Container(
-      child: Text("视频详情页，vid${widget.videoMo.vid}"),
+      child: Column(
+        children: [
+          Text("视频详情页，vid${widget.videoMo.vid}"),
+          Text("视频详情页，标题${widget.videoMo.title}"),
+          _videoView()
+        ],
+      ),
+
     ),);
+  }
+
+  _videoView() {
+    var videoMo = widget.videoMo;
+    return VideoView(videoMo.url,cover: videoMo.cover);
   }
 }

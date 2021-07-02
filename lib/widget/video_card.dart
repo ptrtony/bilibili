@@ -1,5 +1,7 @@
 import 'package:blibli_app/model/home_model.dart';
+import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/utils/format_util.dart';
+import 'package:blibli_app/utils/view_util.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -13,20 +15,18 @@ class VideoCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         print(videoMo.url);
+        HiNavigator.getInstance().onJumpTo(RouteStatus.detail, args: {"videoMo": videoMo});
       },
       child: SizedBox(
         height: 200,
         child: Card(
           margin: EdgeInsets.only(left: 4, right: 4, bottom: 8),
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(5),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [_itemImage(context),
-                _infoText()],
-
-            ),
-          ),
+              borderRadius: BorderRadius.circular(5),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [_itemImage(context), _infoText()],
+              )),
         ),
       ),
     );
@@ -36,13 +36,7 @@ class VideoCard extends StatelessWidget {
     final size = MediaQuery.of(context).size; //容器的宽高设置
     return Stack(
       children: [
-        FadeInImage.memoryNetwork(
-          height: 120,
-          width: size.width / 2 - 20,
-          placeholder: kTransparentImage,
-          image: videoMo.cover,
-          fit: BoxFit.cover,
-        ),
+        cacheImage(videoMo.cover,width: size.width/2-10,height: 120),
         Positioned(
             left: 0,
             right: 0,
@@ -86,6 +80,52 @@ class VideoCard extends StatelessWidget {
   }
 
   _infoText() {
+    return Expanded(
+        child: Padding(
+      padding: EdgeInsets.only(left: 5, right: 5, top: 5, bottom: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            videoMo.title,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(fontSize: 12, color: Colors.black87),
+          ),
+          _owner()
+        ],
+      ),
+    ));
+  }
 
+  _owner() {
+    var owner = videoMo.owner;
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              
+              child: cacheImage(owner.face,width: 24,height: 24),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+              child: Text(
+                owner.name,
+                style: TextStyle(fontSize: 11, color: Colors.black87),
+              ),
+            )
+          ],
+        ),
+        Icon(
+          Icons.more_vert_sharp,
+          size: 15,
+          color: Colors.grey,
+        )
+      ],
+    );
   }
 }
