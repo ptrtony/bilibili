@@ -1,11 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:blibli_app/utils/view_util.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
-
 enum StatusStyle { LIGHT_CONTENT, DARK_CONTENT }
 
-///可自定义样式的沉浸式导航栏
-class NavigationBar extends StatelessWidget {
+
+class NavigationBar extends StatefulWidget {
   final StatusStyle statusStyle;
   final Color color;
   final double height;
@@ -13,31 +11,40 @@ class NavigationBar extends StatelessWidget {
 
   const NavigationBar(
       {Key key,
-      this.statusStyle = StatusStyle.DARK_CONTENT,
-      this.color = Colors.white,
-      this.height = 46,
-      this.children})
+        this.statusStyle = StatusStyle.DARK_CONTENT,
+        this.color = Colors.white,
+        this.height = 46,
+        this.children})
       : super(key: key);
+  @override
+  _NavigationBarState createState() => _NavigationBarState();
+}
+
+class _NavigationBarState extends State<NavigationBar> {
+
+  @override
+  void initState() {
+    super.initState();
+    _statusBarInit();
+  }
+
 
   @override
   Widget build(BuildContext context) {
-    _statusBarInit();
     //状态栏高度
     var top = MediaQuery.of(context).padding.top;
     return Container(
       width: MediaQuery.of(context).size.width,
-      height: top + height,
-      child: children,
+      height: top + widget.height,
+      child: widget.children,
       padding: EdgeInsets.only(top: top),
-      decoration: BoxDecoration(color: color),
+      decoration: BoxDecoration(color: widget.color),
     );
   }
 
+
   void _statusBarInit() {
-    //沉浸式状态栏样式
-    FlutterStatusbarManager.setColor(color, animated: false);
-    FlutterStatusbarManager.setStyle(statusStyle == StatusStyle.DARK_CONTENT
-        ? StatusBarStyle.DARK_CONTENT
-        : StatusBarStyle.LIGHT_CONTENT);
+    changeStatusBar(widget.color,widget.statusStyle);
   }
 }
+

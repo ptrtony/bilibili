@@ -4,12 +4,11 @@ import 'package:blibli_app/http/dao/home_dao.dart';
 import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/page/home_tab_page.dart';
-import 'package:blibli_app/utils/color.dart';
 import 'package:blibli_app/utils/toast_util.dart';
+import 'package:blibli_app/widget/hi_tab.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:underline_indicator/underline_indicator.dart';
 
 class HomePage extends StatefulWidget {
   final ValueChanged<int> onJumpTo;
@@ -84,24 +83,17 @@ class _HomePageState extends HiState<HomePage>
   bool get wantKeepAlive => true;
 
   _tabBar() {
-    return TabBar(
-        controller: _controller,
-        isScrollable: true,
-        labelColor: Colors.black,
-        indicator: UnderlineIndicator(
-            strokeCap: StrokeCap.round,
-            borderSide: BorderSide(color: primary, width: 3),
-            insets: EdgeInsets.only(left: 15, right: 15)),
-        tabs: categoryList.map<Tab>((tab) {
+    return HiTab(
+        categoryList.map<Tab>((tab) {
           return Tab(
-            child: Padding(
-                padding: EdgeInsets.only(left: 5, right: 5),
-                child: Text(
-                  tab.name,
-                  style: TextStyle(fontSize: 16),
-                )),
+            text: tab.name,
           );
-        }).toList());
+        }).toList(),
+        controller: _controller,
+        unSelectedLabelColor: Colors.black54,
+        fontSize: 16,
+        borderWidth: 3,
+        insets: 13);
   }
 
   void loadData() async {

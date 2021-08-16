@@ -414,9 +414,12 @@ class _MaterialControlsState extends State<MaterialControls>
   }
 
   void _onExpandCollapse() {
+    if(chewieController.videoPlayerController.value.size == null){
+      print("videoPlayerController.value.size is null");
+      return;
+    }
     setState(() {
       _hideStuff = true;
-
       chewieController.toggleFullScreen();
       _showAfterExpandCollapseTimer =
           Timer(const Duration(milliseconds: 300), () {

@@ -1,3 +1,4 @@
+import 'package:blibli_app/utils/view_util.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -25,5 +26,31 @@ appBar(String title, String rightTitle, VoidCallback rightButtonCallback) {
         ),
       )
     ],
+  );
+}
+
+
+///视频详情页AppBar
+videoAppBar() {
+  return Container(
+    padding: EdgeInsets.only(left: 8),
+    decoration: BoxDecoration(
+        gradient: blackLinearGradient(fromTop: true)
+    ),
+    child:Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        BackButton(
+          color: Colors.white,
+        ),
+        Row(
+          children: [
+            Icon(Icons.live_tv_rounded,color: Colors.white),
+            Padding(padding: EdgeInsets.only(left: 12),
+            child: Icon(Icons.more_vert_rounded,color: Colors.white,),)
+          ],
+        )
+      ],
+    ),
   );
 }
