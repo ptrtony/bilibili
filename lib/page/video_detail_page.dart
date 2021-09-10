@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:blibli_app/barrage/barrage_input.dart';
+import 'package:blibli_app/barrage/barrage_switch.dart';
+import 'package:blibli_app/barrage/hi_barrage.dart';
 import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/favorite_dao.dart';
 import 'package:blibli_app/http/dao/like_dao.dart';
@@ -13,10 +16,12 @@ import 'package:blibli_app/widget/expandable_content.dart';
 import 'package:blibli_app/widget/hi_tab.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:blibli_app/widget/video_header.dart';
+import 'package:blibli_app/widget/video_large_card.dart';
 import 'package:blibli_app/widget/video_tool_bar.dart';
 import 'package:blibli_app/widget/video_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_overlay/flutter_overlay.dart';
 
 class VideoDetailPage extends StatefulWidget {
   final VideoMo videoMo;
@@ -34,6 +39,8 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   VideoDetailMo videoDetailMo;
   VideoMo videoModel;
+  var _barrageKey = GlobalKey<HiBarrageState>();
+  bool _inputShowing = false;
 
   @override
   void initState() {
@@ -41,6 +48,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     changeStatusBar(Colors.black, StatusStyle.LIGHT_CONTENT);
     _controller = TabController(length: tabs.length, vsync: this);
     this.videoModel = widget.videoMo;
+    videoDetailMo = VideoDetailMo(videoInfo: videoModel, videoList: []);
     _loadDetail();
   }
 
@@ -83,6 +91,11 @@ class _VideoDetailPageState extends State<VideoDetailPage>
       videoMo.url,
       cover: videoMo.cover,
       overlayUI: videoAppBar(),
+      barrageUI: HiBarrage(
+        key: _barrageKey,
+        vid: videoModel.vid,
+        autoPlay: true,
+      ),
     );
   }
 
@@ -97,17 +110,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         color: Colors.white,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _tabBar(),
-            Padding(
-              padding: EdgeInsets.only(right: 20),
-              child: Icon(
-                Icons.live_tv_rounded,
-                size: 20,
-                color: Colors.grey,
-              ),
-            )
-          ],
+          children: [_tabBar(), _buildBarrageButton()],
         ),
       ),
     );
@@ -137,16 +140,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   _buildDetailList() {
     return ListView(
       padding: EdgeInsets.only(top: 0),
-      children: [
-        ...buildContents(),
-        Container(
-          height: 500,
-          margin: EdgeInsets.only(top: 10),
-          alignment: Alignment.topLeft,
-          decoration: BoxDecoration(color: Colors.lightBlueAccent),
-          child: Text("展开列表"),
-        )
-      ],
+      children: [...buildContents(), ...buildVideoList()],
     );
   }
 
@@ -190,45 +184,45 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   ///喜欢
   void _doLike() async {
-    try{
+    try {
       var result = await LikeDao.like(videoModel.vid, !videoDetailMo.isLike);
       showToast(result['msg']);
       videoDetailMo.isLike = !videoDetailMo.isLike;
-      if(videoDetailMo.isLike){
+      if (videoDetailMo.isLike) {
         videoModel.like += 1;
-      }else{
+      } else {
         videoModel.like -= 1;
       }
       setState(() {
         videoDetailMo = videoDetailMo;
         videoModel = videoModel;
       });
-    }on NeedAuth catch(e){
+    } on NeedAuth catch (e) {
       showWarnToast(e.message);
-    }on NeedLogin catch(e){
+    } on NeedLogin catch (e) {
       showWarnToast(e.message);
-    }catch(e){
+    } catch (e) {
       showWarnToast(e.toString());
     }
   }
 
   ///不喜欢
   void _onUnLike() async {
-    if(videoDetailMo.isLike){
-      try{
+    if (videoDetailMo.isLike) {
+      try {
         var result = await LikeDao.like(videoModel.vid, false);
         showToast(result['msg']);
         videoDetailMo.isLike = false;
-        videoModel.like -=1;
+        videoModel.like -= 1;
         setState(() {
           videoDetailMo = videoDetailMo;
           videoModel = videoModel;
         });
-      }on NeedAuth catch(e){
+      } on NeedAuth catch (e) {
         showWarnToast(e.message);
-      }on NeedLogin catch(e){
+      } on NeedLogin catch (e) {
         showWarnToast(e.message);
-      }catch(e){
+      } catch (e) {
         showWarnToast(e.toString());
       }
     }
@@ -237,7 +231,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   void _onCoin() {}
 
   ///收藏
-  void _onFavorite() async{
+  void _onFavorite() async {
     try {
       var result =
           await FavoriteDao.favorite(videoModel.vid, !videoDetailMo.isFavorite);
@@ -263,4 +257,35 @@ class _VideoDetailPageState extends State<VideoDetailPage>
 
   ///分享
   void _onShare() {}
+
+  buildVideoList() {
+    return videoDetailMo.videoList
+        .map((videoMo) => VideoLargeCard(videoMo: videoMo));
+  }
+
+  _buildBarrageButton() {
+    return BarrageSwitch(
+      inputShowing: _inputShowing,
+      onShowInput: () {
+        _inputShowing = true;
+        HiOverlay.show(context, child: BarrageInput(
+          onTabClose: () {
+            setState(() {
+              _inputShowing = false;
+            });
+          },
+        )).then((value) {
+          print("-----input:$value");
+          _barrageKey.currentState.send(value);
+        });
+      },
+      onBarrageSwitch: (open) {
+        if(open){
+          _barrageKey.currentState.play();
+        }else{
+          _barrageKey.currentState.pause();
+        }
+      },
+    );
+  }
 }

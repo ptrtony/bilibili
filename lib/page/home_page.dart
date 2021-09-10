@@ -5,6 +5,7 @@ import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/page/home_tab_page.dart';
 import 'package:blibli_app/utils/toast_util.dart';
+import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/hi_tab.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
@@ -61,8 +62,8 @@ class _HomePageState extends HiState<HomePage>
               statusStyle: StatusStyle.DARK_CONTENT,
               children: _appBar()),
           Container(
-            color: Colors.white,
             child: _tabBar(),
+            decoration: bottomBoxShadow(),
           ),
           Flexible(
               child: TabBarView(
@@ -157,9 +158,14 @@ class _HomePageState extends HiState<HomePage>
           ),
           Padding(
             padding: EdgeInsets.only(left: 12),
-            child: Icon(
-              Icons.email,
-              color: Colors.grey,
+            child: InkWell(
+              onTap: () {
+                HiNavigator.getInstance().onJumpTo(RouteStatus.notice);
+              },
+              child: Icon(
+                Icons.email,
+                color: Colors.grey,
+              ),
             ),
           )
         ],

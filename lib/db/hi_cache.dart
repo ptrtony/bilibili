@@ -57,6 +57,6 @@ class HiCache {
   }
 
   T get<T>(String key) {
-    return _prefers.get(key);
+    return _prefers?.get(key);
   }
 }

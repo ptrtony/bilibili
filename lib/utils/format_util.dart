@@ -1,4 +1,6 @@
 
+import 'package:date_format/date_format.dart';
+
 ///时间转换将秒转换为分钟:秒
 String durationTransform(int seconds){
   int m = (seconds / 60).truncate();
@@ -20,6 +22,13 @@ String formatCount(int count){
     views = "$count";
   }
   return views;
+}
+
+
+String dateMonthAndDay(String dateStr) {
+  DateTime date = DateTime.parse(dateStr);
+  String formatted = formatDate(date, [mm,'-',dd]);
+  return formatted;
 }
 
 

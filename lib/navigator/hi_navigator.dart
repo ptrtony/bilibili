@@ -1,8 +1,10 @@
 import 'package:blibli_app/navigator/bottom_navigator.dart';
 import 'package:blibli_app/page/login_page.dart';
+import 'package:blibli_app/page/notice_list_page.dart';
 import 'package:blibli_app/page/registration_page.dart';
 import 'package:blibli_app/page/video_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 typedef RouteChangeListener(RouteStatusInfo current,RouteStatusInfo pre);
 
@@ -23,7 +25,7 @@ int getPageIndex(List<MaterialPage> pages, RouteStatus routeStatus) {
 }
 
 ///自定义路由封装，路由状态
-enum RouteStatus { login, registration, home, detail, unknown }
+enum RouteStatus { login, registration, home, detail,notice, unknown }
 
 ///获取page对应的RouteStatus
 RouteStatus getStatus(MaterialPage page) {
@@ -35,6 +37,8 @@ RouteStatus getStatus(MaterialPage page) {
     return RouteStatus.home;
   } else if (page.child is VideoDetailPage) {
     return RouteStatus.detail;
+  } else if(page.child is NoticeListPage){
+    return RouteStatus.notice;
   }
   return RouteStatus.unknown;
 }
@@ -111,6 +115,10 @@ class HiNavigator extends _RouteJumpListener{
       listener(current,_current);
     });
     _current = current;
+  }
+
+  void openH5(String _url) async{
+    await canLaunch(_url) ? await launch(_url) : throw 'Could not launch $_url';
   }
 }
 

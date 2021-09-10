@@ -67,11 +67,21 @@ borderLine(BuildContext context, {bottom: true, top: false}) {
   BorderSide borderSide = BorderSide(color: Colors.grey[200], width: 0.5);
   return Border(
       top: bottom ? borderSide : BorderSide.none,
-      bottom: top ? borderSide : BorderSide.none
-  );
+      bottom: top ? borderSide : BorderSide.none);
 }
 
 ///间距
-hiSpace({double height:1,double width:1}){
-  return SizedBox(height: height,width: width);
+hiSpace({double height: 1, double width: 1}) {
+  return SizedBox(height: height, width: width);
+}
+
+///底部阴影
+BoxDecoration bottomBoxShadow() {
+  return BoxDecoration(color: Colors.white, boxShadow: [
+    BoxShadow(
+        color: Colors.grey[100],
+        offset: Offset(0, 5),//xy轴偏移
+        blurRadius: 5.0,//阴影模糊程度
+        spreadRadius: 1)//阴影扩散程度
+  ]);
 }

@@ -5,11 +5,15 @@ import 'package:blibli_app/navigator/bottom_navigator.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/page/home_page.dart';
 import 'package:blibli_app/page/login_page.dart';
+import 'package:blibli_app/page/notice_list_page.dart';
 import 'package:blibli_app/page/registration_page.dart';
 import 'package:blibli_app/page/video_detail_page.dart';
+import 'package:blibli_app/provider/hi_provider.dart';
+import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/color.dart';
 import 'package:blibli_app/utils/toast_util.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'model/video_model.dart';
 
@@ -40,9 +44,17 @@ class _BiliAppState extends State<BiliApp> {
                     child: CircularProgressIndicator(),
                   ),
                 );
-          return MaterialApp(
-            home: widget,
-            theme: ThemeData(primarySwatch: white),
+          return MultiProvider(
+            providers: topProvider,
+            child: Consumer<ThemeProvider>(builder: (BuildContext context,
+                ThemeProvider themeProvider, Widget child) {
+              return MaterialApp(
+                home: widget,
+                theme: themeProvider.getTheme(),
+                darkTheme: themeProvider.getTheme(isDarkMode: true),
+                themeMode: themeProvider.getThemeMode(),
+              );
+            }),
           );
         });
   }
@@ -104,8 +116,9 @@ class BiliRouteDelegate extends RouterDelegate<BiliRoutePath>
       page = pageWrap(RegistrationPage());
     } else if (routeStatus == RouteStatus.login) {
       page = pageWrap(LoginPage());
+    } else if (routeStatus == RouteStatus.notice) {
+      page = pageWrap(NoticeListPage());
     }
-
     tempPages = [...tempPages, page];
     HiNavigator.getInstance().notify(tempPages, pages);
     pages = tempPages;
@@ -165,4 +178,6 @@ class BiliRoutePath {
   BiliRoutePath.home() : location = "/";
 
   BiliRoutePath.detail() : location = "/detail";
+
+  BiliRoutePath.notice() : location = "/notice";
 }

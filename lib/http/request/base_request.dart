@@ -1,4 +1,5 @@
 import 'package:blibli_app/http/dao/login_dao.dart';
+import 'package:blibli_app/utils/hi_constants.dart';
 
 enum HttpMethod { GET, POST, DELETE }
 
@@ -53,9 +54,10 @@ abstract class BaseRequest {
   }
 
   Map<String, dynamic> header = {
-    'course-flag': 'fa',
     //访问令牌，在公告栏中去获取
-    'auth-token': 'MjAyMC0wNi0yMyAwMzoyNTowMQ==fa'
+    HiConstants.authTokenK:HiConstants.authTokenV,
+
+    HiConstants.courseFlagK:HiConstants.courseFlagV
   };
 
   ///添加Header
