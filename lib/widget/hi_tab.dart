@@ -15,6 +15,7 @@ class HiTab extends StatelessWidget {
   const HiTab(this.tabs, {Key key,this.controller, this.fontSize = 16, this.borderWidth = 3, this.insets = 15, this.unSelectedLabelColor = Colors.grey}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+
     return TabBar(
         controller: controller,
         isScrollable: true,

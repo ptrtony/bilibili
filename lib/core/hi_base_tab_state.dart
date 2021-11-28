@@ -47,7 +47,7 @@ abstract class HiBaseTabState<M, L, T extends StatefulWidget> extends HiState<T>
             appBar: AppBar(
               title: Text(
                 centerTitle,
-                style: TextStyle(color: Colors.black, fontSize: 18),
+                style: TextStyle(fontSize: 18),
               ),
               centerTitle: true,
             ),

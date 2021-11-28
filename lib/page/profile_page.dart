@@ -6,6 +6,7 @@ import 'package:blibli_app/utils/toast_util.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/benefit_card.dart';
 import 'package:blibli_app/widget/course_card.dart';
+import 'package:blibli_app/widget/dark_mode_item.dart';
 import 'package:blibli_app/widget/hi_blur.dart';
 import 'package:blibli_app/widget/hi_flexible_header.dart';
 import 'package:flutter/cupertino.dart';
@@ -56,7 +57,8 @@ class _ProfilePageState extends State<ProfilePage>
       Padding(padding: EdgeInsets.only(top: 10)),
       _buildBannerContent(),
       CourseCard(courseList:_profileMo.courseList),
-      BenefitCard(benefitList: _profileMo.benefitList,)
+      BenefitCard(benefitList: _profileMo.benefitList,),
+      DarkModeItem()
     ];
   }
 

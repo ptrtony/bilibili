@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:blibli_app/page/ranking_tab_page.dart';
+import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/hi_tab.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RankingPage extends StatefulWidget {
   @override
@@ -25,7 +27,7 @@ class _RankingPageState extends State<RankingPage>
   void initState() {
     super.initState();
     _controller = TabController(length: TABS.length, vsync: this);
-    changeStatusBar(Colors.black, StatusStyle.LIGHT_CONTENT);
+    changeStatusBar(color:Colors.black, statusStyle:StatusStyle.LIGHT_CONTENT,context: null);
   }
 
   @override
@@ -37,15 +39,12 @@ class _RankingPageState extends State<RankingPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-          children: [
-            _buildNavigationBar(),
-            _buildTabView()
-          ],
-        ));
+        body: Column(children: [_buildNavigationBar(context), _buildTabView()])
+    );
   }
 
-  _tabBar() {
+  _tabBar(BuildContext context) {
+    bool isDark = context.watch<ThemeProvider>().isDark();
     return HiTab(
         TABS.map<Tab>((tab) {
           return Tab(text: tab['name']);
@@ -53,23 +52,29 @@ class _RankingPageState extends State<RankingPage>
         fontSize: 16,
         borderWidth: 3,
         insets: 15,
-        unSelectedLabelColor: Colors.black54,
+        unSelectedLabelColor: isDark ? Colors.white70 : Colors.black54,
         controller: _controller);
   }
 
-  _buildNavigationBar() {
+  _buildNavigationBar(BuildContext context) {
     return NavigationBar(
       children: Container(
         alignment: Alignment.center,
-        child: _tabBar(),
-        decoration: bottomBoxShadow(),
+        child: _tabBar(context),
+        decoration: bottomBoxShadow(context),
       ),
     );
   }
 
   _buildTabView() {
-    return Flexible(child: TabBarView(children: TABS.map((tab){
-      return RankingTabPage(categoryName: tab['key'],);
-    }).toList(),controller: _controller,));
+    return Flexible(
+        child: TabBarView(
+      children: TABS.map((tab) {
+        return RankingTabPage(
+          categoryName: tab['key'],
+        );
+      }).toList(),
+      controller: _controller,
+    ));
   }
 }

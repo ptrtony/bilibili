@@ -91,7 +91,7 @@ class VideoCard extends StatelessWidget {
             videoMo.title,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
-            style: TextStyle(fontSize: 12, color: Colors.black87),
+            style: TextStyle(fontSize: 12),
           ),
           _owner()
         ],
@@ -115,7 +115,7 @@ class VideoCard extends StatelessWidget {
               padding: EdgeInsets.only(left: 8),
               child: Text(
                 owner.name,
-                style: TextStyle(fontSize: 11, color: Colors.black87),
+                style: TextStyle(fontSize: 11),
               ),
             )
           ],
@@ -123,7 +123,6 @@ class VideoCard extends StatelessWidget {
         Icon(
           Icons.more_vert_sharp,
           size: 15,
-          color: Colors.grey,
         )
       ],
     );

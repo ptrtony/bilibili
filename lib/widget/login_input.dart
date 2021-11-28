@@ -83,14 +83,14 @@ class _LoginInputState extends State<LoginInput> {
       autofocus: !widget.obscureText,
       cursorColor: primary,
       style: TextStyle(
-          fontSize: 16, color: Colors.black, fontWeight: FontWeight.w300),
+          fontSize: 16, fontWeight: FontWeight.w300),
       //输入框文本的样式
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: 20, right: 20),
         border: InputBorder.none,
         hintText: widget.hint ?? "",
         hintStyle: TextStyle(
-            fontSize: 15, color: Colors.grey, fontWeight: FontWeight.w300),
+            fontSize: 15, fontWeight: FontWeight.w300),
         //输入框的样式
       ),
     ));

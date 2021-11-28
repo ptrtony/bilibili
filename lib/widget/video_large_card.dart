@@ -69,7 +69,7 @@ class _VideoLargeCardState extends State<VideoLargeCard> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(widget.videoMo.title,style: TextStyle(color: Colors.black87,fontSize: 12),maxLines: 2,overflow: TextOverflow.ellipsis,),
+          Text(widget.videoMo.title,style: TextStyle(fontSize: 12),maxLines: 2,overflow: TextOverflow.ellipsis,),
 
           Column(
             children: [

@@ -9,6 +9,7 @@ import 'package:blibli_app/http/dao/like_dao.dart';
 import 'package:blibli_app/http/dao/video_detail_dao.dart';
 import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/model/video_detail_mo.dart';
+import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/toast_util.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/app_bar.dart';
@@ -22,7 +23,7 @@ import 'package:blibli_app/widget/video_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay/flutter_overlay.dart';
-
+import 'package:provider/provider.dart';
 class VideoDetailPage extends StatefulWidget {
   final VideoMo videoMo;
 
@@ -45,7 +46,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
   @override
   void initState() {
     super.initState();
-    changeStatusBar(Colors.black, StatusStyle.LIGHT_CONTENT);
+    changeStatusBar(color:Colors.black, statusStyle:StatusStyle.LIGHT_CONTENT,context:null);
     _controller = TabController(length: tabs.length, vsync: this);
     this.videoModel = widget.videoMo;
     videoDetailMo = VideoDetailMo(videoInfo: videoModel, videoList: []);
@@ -72,9 +73,10 @@ class _VideoDetailPageState extends State<VideoDetailPage>
                         statusStyle: StatusStyle.LIGHT_CONTENT,
                         color: Colors.black,
                         height: Platform.isAndroid ? 0 : 46,
+                        changeStatusColor: false,
                       ),
                       _buildVideoView(),
-                      _buildTabNavigation(),
+                      _buildTabNavigation(context),
                       _buildVideoDetailView()
                       // Text("视频详情页，vid${widget.videoMo.vid}"),
                       // Text("视频详情页，标题${widget.videoMo.title}")
@@ -99,31 +101,31 @@ class _VideoDetailPageState extends State<VideoDetailPage>
     );
   }
 
-  _buildTabNavigation() {
+  _buildTabNavigation(BuildContext context) {
     return Material(
       elevation: 5,
-      shadowColor: Colors.grey[100],
+      shadowColor: Colors.black45,
       child: Container(
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.only(left: 20),
         height: 39,
-        color: Colors.white,
+        color: Colors.black,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [_tabBar(), _buildBarrageButton()],
+          children: [_tabBar(context), _buildBarrageButton()],
         ),
       ),
     );
   }
 
-  _tabBar() {
+  _tabBar(BuildContext context) {
     return HiTab(
       tabs.map<Tab>((tab) {
         return Tab(text: tab);
       }).toList(),
       insets: 15,
       controller: _controller,
-      unSelectedLabelColor: Colors.black45,
+      unSelectedLabelColor: Colors.white70,
     );
   }
 

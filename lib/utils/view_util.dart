@@ -1,9 +1,14 @@
+import 'package:blibli_app/navigator/hi_navigator.dart';
+import 'package:blibli_app/page/profile_page.dart';
+import 'package:blibli_app/page/video_detail_page.dart';
+import 'package:blibli_app/provider/theme_provider.dart';
+import 'package:blibli_app/utils/color.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_statusbar_manager/flutter_statusbar_manager.dart';
-
 import 'format_util.dart';
+import 'package:provider/provider.dart';
 
 ///待缓存的image
 Widget cacheImage(String url, {double height, double width}) {
@@ -35,7 +40,22 @@ blackLinearGradient({bool fromTop = false}) {
 }
 
 ///沉浸式状态栏
-changeStatusBar(Color color, StatusStyle statusStyle) {
+changeStatusBar({Color color, StatusStyle statusStyle,BuildContext context}) {
+  if(context != null){
+    bool isDark = context.watch<ThemeProvider>().isDark();
+    if(isDark){
+      color = HiColor.dark_bg;
+      statusStyle = StatusStyle.LIGHT_CONTENT;
+    }
+  }
+
+  var page = HiNavigator.getInstance().getCurrentPage()?.page;
+  if(page is ProfilePage){
+    color = Colors.transparent;
+  }else if(page is VideoDetailPage){
+    color = Colors.black;
+    statusStyle = StatusStyle.LIGHT_CONTENT;
+  }
   //沉浸式状态栏样式
   FlutterStatusbarManager.setColor(color, animated: false);
   FlutterStatusbarManager.setStyle(statusStyle == StatusStyle.DARK_CONTENT
@@ -66,8 +86,8 @@ smallIconText(IconData iconData, var text) {
 borderLine(BuildContext context, {bottom: true, top: false}) {
   BorderSide borderSide = BorderSide(color: Colors.grey[200], width: 0.5);
   return Border(
-      top: bottom ? borderSide : BorderSide.none,
-      bottom: top ? borderSide : BorderSide.none);
+      top: top ? borderSide : BorderSide.none,
+      bottom: bottom ? borderSide : BorderSide.none);
 }
 
 ///间距
@@ -76,12 +96,13 @@ hiSpace({double height: 1, double width: 1}) {
 }
 
 ///底部阴影
-BoxDecoration bottomBoxShadow() {
-  return BoxDecoration(color: Colors.white, boxShadow: [
+BoxDecoration bottomBoxShadow(BuildContext context) {
+  bool isDark = context.watch<ThemeProvider>().isDark();
+  return BoxDecoration(color: isDark ? Colors.black : Colors.white, boxShadow: [
     BoxShadow(
-        color: Colors.grey[100],
-        offset: Offset(0, 5),//xy轴偏移
-        blurRadius: 5.0,//阴影模糊程度
-        spreadRadius: 1)//阴影扩散程度
+        color: isDark ? Colors.black12 : Colors.grey[100],
+        offset: Offset(0, 5), //xy轴偏移
+        blurRadius: 5.0, //阴影模糊程度
+        spreadRadius: 1) //阴影扩散程度
   ]);
 }

@@ -1,6 +1,7 @@
+import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 class HiFlexibleHeader extends StatefulWidget {
   final String name;
   final String face;
@@ -44,6 +45,7 @@ class _HiFlexibleHeaderState extends State<HiFlexibleHeader> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDark = context.watch<ThemeProvider>().isDark();
     return Container(
       margin: EdgeInsets.only(left: 30, right: 30, bottom: _byBottom),
       child: Row(
@@ -55,7 +57,7 @@ class _HiFlexibleHeaderState extends State<HiFlexibleHeader> {
           hiSpace(width: 10),
           Text(
             widget.name,
-            style: TextStyle(fontSize: 14,color: Colors.black38),
+            style: TextStyle(fontSize: 14,color: isDark?Colors.white70:Colors.black38),
           )
         ],
       ),

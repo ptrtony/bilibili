@@ -1,9 +1,9 @@
 import 'package:blibli_app/model/profile_mo.dart';
-import 'package:blibli_app/model/profile_mo.dart';
+import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/hi_blur.dart';
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
 class BenefitCard extends StatelessWidget {
   final List<BenefitList> benefitList;
 
@@ -14,21 +14,22 @@ class BenefitCard extends StatelessWidget {
     return Container(
       padding: EdgeInsets.only(bottom: 10),
       child: Column(
-        children: [_buildText(),
+        children: [_buildText(context),
           _buildBenefitCard(context)
         ],
       ),
     );
   }
 
-  _buildText() {
+  _buildText(BuildContext context) {
+    bool isDark = context.watch<ThemeProvider>().isDark();
     return Container(
       margin: EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
       child: Row(
         children: [
           Text(
             "增值服务",
-            style: TextStyle(fontSize: 18, color: Colors.black),
+            style: TextStyle(fontSize: 18, color:isDark?Colors.grey:Colors.black),
           ),
           hiSpace(width: 10),
           Text(

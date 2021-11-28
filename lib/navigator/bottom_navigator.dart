@@ -11,7 +11,7 @@ class BottomNavigator extends StatefulWidget {
   _BottomNavigatorState createState() => _BottomNavigatorState();
 }
 
-class _BottomNavigatorState extends State<BottomNavigator> {
+class _BottomNavigatorState extends State<BottomNavigator> with AutomaticKeepAliveClientMixin{
   final defaultColor = Colors.grey;
   final activeColor = primary;
   int _currentIndex = 0;
@@ -77,4 +77,7 @@ class _BottomNavigatorState extends State<BottomNavigator> {
       _currentIndex = index;
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
