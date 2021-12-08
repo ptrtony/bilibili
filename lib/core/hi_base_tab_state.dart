@@ -1,9 +1,9 @@
 import 'package:blibli_app/core/HiState.dart';
-import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/utils/color.dart';
 import 'package:blibli_app/utils/toast_util.dart';
 import 'package:blibli_app/widget/loading_container.dart';
 import 'package:flutter/material.dart';
+import 'package:hi_net/core/hi_net_error.dart';
 
 abstract class HiBaseTabState<M, L, T extends StatefulWidget> extends HiState<T>
     with AutomaticKeepAliveClientMixin {

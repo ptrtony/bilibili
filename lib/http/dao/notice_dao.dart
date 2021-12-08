@@ -1,9 +1,8 @@
 
-
-import 'package:blibli_app/http/core/hi_net.dart';
 import 'package:blibli_app/http/request/base_request.dart';
 import 'package:blibli_app/http/request/notice_request.dart';
 import 'package:blibli_app/model/notice_mo.dart';
+import 'package:hi_net/hi_net.dart';
 
 class NoticeDao{
  

@@ -1,4 +1,4 @@
-import 'package:blibli_app/http/core/hi_net_error.dart';
+
 import 'package:blibli_app/http/dao/login_dao.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
 import 'package:blibli_app/utils/string_util.dart';
@@ -8,6 +8,7 @@ import 'package:blibli_app/widget/login_effect.dart';
 import 'package:blibli_app/widget/login_input.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hi_net/core/hi_net_error.dart';
 
 class RegistrationPage extends StatefulWidget {
 

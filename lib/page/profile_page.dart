@@ -1,4 +1,4 @@
-import 'package:blibli_app/http/core/hi_net_error.dart';
+
 import 'package:blibli_app/http/dao/profile_dao.dart';
 import 'package:blibli_app/model/profile_mo.dart';
 import 'package:blibli_app/page/hi_banner.dart';
@@ -11,6 +11,7 @@ import 'package:blibli_app/widget/hi_blur.dart';
 import 'package:blibli_app/widget/hi_flexible_header.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hi_net/core/hi_net_error.dart';
 
 class ProfilePage extends StatefulWidget {
   @override

@@ -1,5 +1,4 @@
 import 'package:blibli_app/core/HiState.dart';
-import 'package:blibli_app/http/core/hi_net_error.dart';
 import 'package:blibli_app/http/dao/home_dao.dart';
 import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/navigator/hi_navigator.dart';
@@ -11,6 +10,7 @@ import 'package:blibli_app/widget/hi_tab.dart';
 import 'package:blibli_app/widget/navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hi_net/core/hi_net_error.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {

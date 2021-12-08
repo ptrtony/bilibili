@@ -1,7 +1,5 @@
 
 
-
-
 abstract class IBarrage{
   void send(String message);
 

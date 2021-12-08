@@ -1,12 +1,13 @@
-import 'package:blibli_app/http/core/hi_net_adapter.dart';
-import 'package:blibli_app/http/core/hi_net_error.dart';
-import 'package:blibli_app/http/request/base_request.dart';
 import 'package:dio/dio.dart';
+import 'package:hi_net/request/hi_base_request.dart';
+
+import 'hi_net_adapter.dart';
+import 'hi_net_error.dart';
 
 ///Dio适配器
 class DioAdapter extends HiNetAdapter {
   @override
-  Future<HiNetResponse<T>> send<T>(BaseRequest request) async {
+  Future<HiNetResponse<T>> send<T>(HiBaseRequest request) async {
     var response, options = Options(headers: request.header);
     var error;
     try {
@@ -32,7 +33,7 @@ class DioAdapter extends HiNetAdapter {
   }
 
   ///构建HiNetResponse
-  HiNetResponse buildRes(Response response, BaseRequest request) {
+  HiNetResponse buildRes(Response response, HiBaseRequest request) {
     return HiNetResponse(
         data: response.data,
         request: request,

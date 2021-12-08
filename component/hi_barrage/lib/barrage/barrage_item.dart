@@ -1,5 +1,7 @@
-import 'package:blibli_app/barrage/barrage_translation.dart';
+
 import 'package:flutter/material.dart';
+
+import 'barrage_translation.dart';
 
 class BarrageItem extends StatelessWidget {
   final String id;

@@ -1,9 +1,8 @@
 
-
-
-import 'package:blibli_app/model/barrage_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'barrage_model.dart';
 
 class BarrageViewUtil{
   //如果想定义弹幕的样式，可以在这里根据弹幕的类型来定义

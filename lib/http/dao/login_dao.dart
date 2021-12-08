@@ -1,8 +1,8 @@
 import 'package:blibli_app/db/hi_cache.dart';
-import 'package:blibli_app/http/core/hi_net.dart';
 import 'package:blibli_app/http/request/base_request.dart';
 import 'package:blibli_app/http/request/login_request.dart';
 import 'package:blibli_app/http/request/registration_request.dart';
+import 'package:hi_net/hi_net.dart';
 
 
 //Dao数据访问对象

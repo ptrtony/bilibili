@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:blibli_app/barrage/barrage_item.dart';
-import 'package:blibli_app/barrage/barrage_view_util.dart';
-import 'package:blibli_app/barrage/hi_socket.dart';
-import 'package:blibli_app/barrage/ibarrage.dart';
-import 'package:blibli_app/model/barrage_model.dart';
 import 'package:flutter/material.dart';
+
+import 'barrage/barrage_item.dart';
+import 'barrage/barrage_model.dart';
+import 'barrage/barrage_view_util.dart';
+import 'barrage/hi_socket.dart';
+import 'barrage/ibarrage.dart';
 
 enum BarrageStatus { play, pause }
 
@@ -17,15 +18,17 @@ class HiBarrage extends StatefulWidget {
   final int speed;
   final double top;
   final bool autoPlay;
+  final Map<String, dynamic> headers;
 
-  const HiBarrage(
-      {Key key,
-      this.lineCount = 4,
-      @required this.vid,
-      this.speed = 800,
-      this.top = 0,
-      this.autoPlay = false})
-      : super(key: key);
+  const HiBarrage({
+    Key key,
+    this.lineCount = 4,
+    @required this.vid,
+    @required this.headers,
+    this.speed = 800,
+    this.top = 0,
+    this.autoPlay = false,
+  }) : super(key: key);
 
   @override
   HiBarrageState createState() => HiBarrageState();
@@ -45,7 +48,7 @@ class HiBarrageState extends State<HiBarrage> implements IBarrage {
   @override
   void initState() {
     super.initState();
-    _hiSocket = HiSocket();
+    _hiSocket = HiSocket(widget.headers);
     _hiSocket.open(widget.vid).listen((value) {
       _handleMessage(value);
     });
@@ -66,7 +69,7 @@ class HiBarrageState extends State<HiBarrage> implements IBarrage {
   @override
   Widget build(BuildContext context) {
     _width = MediaQuery.of(context).size.width;
-    _height = _width / 16 * 9 ;
+    _height = _width / 16 * 9;
     return SizedBox(
       width: _width,
       height: _height,
@@ -125,12 +128,14 @@ class HiBarrageState extends State<HiBarrage> implements IBarrage {
     double top = preRowHeight * line + widget.top;
     //给每条弹幕生成一个id
     String id = "${_random.nextInt(1000)}:${model.content}";
-    BarrageItem item = BarrageItem(id: id,top: top,onCompleted: _onCompleted(id),
-    child: BarrageViewUtil.barrageView(model),);
+    BarrageItem item = BarrageItem(
+      id: id,
+      top: top,
+      onCompleted: _onCompleted(id),
+      child: BarrageViewUtil.barrageView(model),
+    );
     _barrageItemList.add(item);
-    setState(() {
-      
-    });
+    setState(() {});
   }
 
   @override

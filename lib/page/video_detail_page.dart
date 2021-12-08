@@ -1,15 +1,13 @@
 import 'dart:io';
 
 import 'package:blibli_app/barrage/barrage_input.dart';
-import 'package:blibli_app/barrage/barrage_switch.dart';
-import 'package:blibli_app/barrage/hi_barrage.dart';
-import 'package:blibli_app/http/core/hi_net_error.dart';
+import 'package:blibli_app/utils/hi_constants.dart';
+import 'package:blibli_app/widget/barrage_switch.dart';
 import 'package:blibli_app/http/dao/favorite_dao.dart';
 import 'package:blibli_app/http/dao/like_dao.dart';
 import 'package:blibli_app/http/dao/video_detail_dao.dart';
 import 'package:blibli_app/model/home_model.dart';
 import 'package:blibli_app/model/video_detail_mo.dart';
-import 'package:blibli_app/provider/theme_provider.dart';
 import 'package:blibli_app/utils/toast_util.dart';
 import 'package:blibli_app/utils/view_util.dart';
 import 'package:blibli_app/widget/app_bar.dart';
@@ -23,7 +21,9 @@ import 'package:blibli_app/widget/video_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_overlay/flutter_overlay.dart';
-import 'package:provider/provider.dart';
+import 'package:hi_barrage/hi_barrage.dart';
+import 'package:hi_net/core/hi_net_error.dart';
+
 class VideoDetailPage extends StatefulWidget {
   final VideoMo videoMo;
 
@@ -97,6 +97,7 @@ class _VideoDetailPageState extends State<VideoDetailPage>
         key: _barrageKey,
         vid: videoModel.vid,
         autoPlay: true,
+        headers: HiConstants.headers(),
       ),
     );
   }
